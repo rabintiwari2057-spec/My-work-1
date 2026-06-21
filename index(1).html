@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b5fff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="My Work">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22180%22%20height%3D%22180%22%20viewBox%3D%220%200%20180%20180%22%3E%0A%3Crect%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%2240%22%20fill%3D%22%230b5fff%22/%3E%0A%3Crect%20x%3D%2236%22%20y%3D%2242%22%20width%3D%22108%22%20height%3D%2296%22%20rx%3D%2216%22%20fill%3D%22%23ffffff%22/%3E%0A%3Cpath%20d%3D%22M36%2065h108%22%20stroke%3D%22%2311233f%22%20stroke-width%3D%2220%22/%3E%0A%3Ccircle%20cx%3D%2259%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23f7c948%22/%3E%3Ccircle%20cx%3D%2278%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23f15b5b%22/%3E%0A%3Cpath%20d%3D%22M58%2091h64M58%20113h44%22%20stroke%3D%22%230b5fff%22%20stroke-width%3D%2210%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E">
+  <title>My Work</title>
+  <style>
+    :root {
+      --blue:#0b5fff; --navy:#11233f; --ink:#152033; --muted:#65748b; --paper:#f4f7fb;
+      --card:#fff; --line:#e2e8f0; --good:#0c8f57; --warn:#a15c00; --shadow:0 8px 24px rgba(24,55,87,.08);
+    }
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial,sans-serif; }
+    button,input { font:inherit; }
+    button { cursor:pointer; border:0; }
+    .app { max-width:680px; margin:auto; min-height:100vh; padding:calc(12px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom)); }
+    header { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 2px 16px; }
+    h1 { margin:0; font-size:31px; color:var(--navy); letter-spacing:-.8px; }
+    h2 { margin:0; font-size:19px; letter-spacing:-.3px; }
+    .subtitle { color:var(--muted); margin:4px 0 0; font-size:14px; line-height:1.35; }
+    .pill { background:#eaf1ff; color:#084bc3; font-weight:800; border-radius:999px; padding:8px 11px; font-size:12px; text-align:center; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); padding:16px; margin-bottom:14px; }
+    .date-row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .date-display { font-size:18px; font-weight:800; letter-spacing:-.2px; }
+    .date-input { min-height:46px; padding:8px 10px; border-radius:12px; border:1px solid #bcd0fa; background:#f8fbff; color:#063f9d; font-weight:800; }
+    .date-strip { display:flex; gap:8px; overflow-x:auto; padding-top:12px; scrollbar-width:none; }
+    .date-strip::-webkit-scrollbar { display:none; }
+    .day-chip { min-width:63px; min-height:63px; flex:0 0 auto; border:1px solid var(--line); border-radius:14px; background:#fff; color:var(--ink); padding:7px 8px; font-weight:800; }
+    .day-chip span { display:block; margin-bottom:3px; color:var(--muted); font-size:12px; }
+    .day-chip.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .day-chip.active span { color:#dce8ff; }
+    .title-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .link-button { background:transparent; color:#0853ca; padding:4px 0; font-weight:800; }
+    .time-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .time-box { min-height:120px; padding:12px; border:1px solid var(--line); border-radius:15px; background:#fbfcff; }
+    .label { color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; }
+    .time { font-weight:800; font-size:21px; margin-top:6px; }
+    .edit-small { margin-top:10px; padding:0; background:transparent; color:#0754cb; font-size:13px; font-weight:800; text-decoration:underline; }
+    .action-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-top:14px; }
+    .action { min-height:66px; border-radius:16px; padding:10px; color:#fff; background:var(--blue); font-size:17px; font-weight:800; box-shadow:0 6px 14px rgba(11,95,255,.2); }
+    .action.break-start { background:#b56800; box-shadow:none; }
+    .action.break-end { background:#344966; box-shadow:none; }
+    .action.out { background:var(--good); box-shadow:none; }
+    .action:disabled { background:#c8d2e0; color:#718096; box-shadow:none; }
+    .rate-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px; margin-top:14px; border-radius:15px; background:#f7faff; border:1px solid #d6e3ff; }
+    .rate-row strong { display:block; font-size:16px; }
+    .rate-row span { display:block; color:var(--muted); font-size:13px; margin-top:3px; }
+    .switch { position:relative; width:58px; height:34px; flex:0 0 auto; }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; inset:0; border-radius:999px; background:#aebbd0; transition:.2s; }
+    .slider:before { content:""; position:absolute; width:26px; height:26px; left:4px; top:4px; border-radius:50%; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.25); transition:.2s; }
+    .switch input:checked + .slider { background:var(--blue); }
+    .switch input:checked + .slider:before { transform:translateX(24px); }
+    .hint { margin:13px 0 0; color:var(--muted); font-size:13px; line-height:1.4; }
+    .summary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .metric { padding:13px; border:1px solid #e4ebf7; border-radius:15px; background:#f7faff; }
+    .metric label { display:block; color:var(--muted); font-size:12px; font-weight:800; }
+    .metric b { display:block; margin-top:5px; font-size:22px; }
+    .shift-list { display:grid; gap:9px; }
+    .shift { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:13px; border:1px solid var(--line); border-radius:15px; background:#fff; }
+    .shift strong { display:block; font-size:15px; }
+    .shift p { margin:4px 0 0; color:var(--muted); font-size:13px; line-height:1.35; }
+    .edit { align-self:center; min-height:42px; border-radius:10px; padding:9px 11px; background:#edf3ff; color:#0749b4; font-weight:800; }
+    .empty { color:var(--muted); text-align:center; padding:16px 5px; font-size:14px; }
+    .export { width:100%; min-height:50px; margin-top:11px; border-radius:14px; color:#0847af; background:#eaf1ff; font-weight:800; }
+    dialog { width:min(92vw,520px); padding:0; border:0; border-radius:20px; box-shadow:0 18px 50px rgba(0,0,0,.28); }
+    dialog::backdrop { background:rgba(15,31,53,.44); }
+    .dialog-body { padding:20px; }
+    .dialog-body h3 { margin:0 0 5px; font-size:22px; }
+    .dialog-body p { margin:0 0 15px; color:var(--muted); font-size:14px; line-height:1.4; }
+    .field { margin:13px 0; }
+    .field label { display:block; margin-bottom:7px; font-weight:800; }
+    .field input { width:100%; min-height:48px; padding:10px; border:1px solid #c9d6e9; border-radius:12px; background:#fff; }
+    .time-fields { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .same-day { margin-top:4px; padding:10px 11px; border-radius:12px; background:#f7faff; color:#4e6078; font-size:13px; line-height:1.35; }
+    .dialog-rate { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+    .dialog-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+    .cancel,.save,.delete { min-height:50px; border-radius:14px; font-weight:800; }
+    .cancel { background:#eff3f8; color:#334155; }
+    .save { background:var(--blue); color:#fff; }
+    .delete { grid-column:1/-1; background:#fff0ef; color:#b42318; }
+    .toast { position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom)); transform:translate(-50%,120px); max-width:90vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:#12243f; color:#fff; padding:12px 16px; border-radius:999px; font-size:14px; font-weight:800; box-shadow:0 8px 20px rgba(0,0,0,.18); opacity:0; transition:.25s; z-index:10; }
+    .toast.show { transform:translate(-50%,0); opacity:1; }
+    @media (max-width:360px) {
+      .app { padding-left:12px; padding-right:12px; }
+      .action { font-size:15px; }
+      .date-row { flex-direction:column; align-items:stretch; }
+      .date-input { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div>
+        <h1>My Work</h1>
+        <p class="subtitle">Tap to record your work hours</p>
+      </div>
+      <div class="pill" id="weekLabel">Week</div>
+    </header>
+
+    <section class="card">
+      <div class="date-row">
+        <div>
+          <div class="date-display" id="selectedDateText"></div>
+          <p class="subtitle">Choose the shift date once. All break times use this same date.</p>
+        </div>
+        <input class="date-input" id="selectedDate" type="date" aria-label="Choose shift date">
+      </div>
+      <div class="date-strip" id="dateStrip" aria-label="Quick date selection"></div>
+    </section>
+
+    <section class="card">
+      <div class="title-row">
+        <h2>Shift</h2>
+        <button class="link-button" id="editShiftTop">Edit shift</button>
+      </div>
+
+      <div class="time-grid">
+        <div class="time-box"><div class="label">Clock in</div><div class="time" id="inTime">—</div><button class="edit-small" data-time-field="clockIn">Edit time</button></div>
+        <div class="time-box"><div class="label">Clock out</div><div class="time" id="outTime">—</div><button class="edit-small" data-time-field="clockOut">Edit time</button></div>
+        <div class="time-box"><div class="label">Break start</div><div class="time" id="breakStartTime">—</div><button class="edit-small" data-time-field="breakStart">Edit time</button></div>
+        <div class="time-box"><div class="label">Break end</div><div class="time" id="breakEndTime">—</div><button class="edit-small" data-time-field="breakEnd">Edit time</button></div>
+      </div>
+
+      <div class="action-grid">
+        <button id="clockInBtn" class="action">Clock In</button>
+        <button id="startBreakBtn" class="action break-start">Start Break</button>
+        <button id="endBreakBtn" class="action break-end">End Break</button>
+        <button id="clockOutBtn" class="action out">Clock Out</button>
+      </div>
+
+      <div class="rate-row">
+        <div>
+          <strong>£15 hourly rate</strong>
+          <span>Tick it for £15/hour. Unticked = £12.71/hour.</span>
+        </div>
+        <label class="switch" aria-label="Use £15 hourly rate">
+          <input id="rateToggle" type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <p class="hint" id="shiftHint">Tap Clock In to start. Edit times with an iPhone time picker — no need to enter the date again.</p>
+    </section>
+
+    <section class="card">
+      <div class="title-row"><h2>This week</h2><span class="subtitle" id="weekRange"></span></div>
+      <div class="summary">
+        <div class="metric"><label>Total paid hours</label><b id="weeklyHours">0h 00m</b></div>
+        <div class="metric"><label>Estimated pay</label><b id="weeklyPay">£0.00</b></div>
+        <div class="metric"><label>£15 hours</label><b id="rate15Hours">0h 00m</b></div>
+        <div class="metric"><label>£12.71 hours</label><b id="rate1271Hours">0h 00m</b></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="title-row"><h2>Saved shifts</h2><span class="subtitle">Latest 20</span></div>
+      <div class="shift-list" id="shiftsList"></div>
+      <button class="export" id="exportBtn">Export spreadsheet (CSV)</button>
+    </section>
+  </main>
+
+  <dialog id="editDialog">
+    <form method="dialog" class="dialog-body" id="editForm">
+      <h3>Edit shift</h3>
+      <p>Choose the shift date once. Then change only the times below. Break start and break end use the same shift date automatically.</p>
+
+      <div class="field">
+        <label for="editDate">Shift date</label>
+        <input id="editDate" type="date">
+      </div>
+
+      <div class="time-fields">
+        <div class="field"><label for="editClockIn">Clock in</label><input id="editClockIn" type="time"></div>
+        <div class="field"><label for="editBreakStart">Break start</label><input id="editBreakStart" type="time"></div>
+        <div class="field"><label for="editBreakEnd">Break end</label><input id="editBreakEnd" type="time"></div>
+        <div class="field"><label for="editClockOut">Clock out</label><input id="editClockOut" type="time"></div>
+      </div>
+
+      <div class="same-day">All four time boxes are for the shift date shown above. You do not need to choose the day again for your break.</div>
+
+      <div class="dialog-rate">
+        <div><strong>£15 hourly rate</strong><div class="subtitle">Unticked = £12.71/hour</div></div>
+        <label class="switch" aria-label="Use £15 hourly rate"><input id="editRateToggle" type="checkbox"><span class="slider"></span></label>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="cancel" id="cancelEdit">Cancel</button>
+        <button type="submit" class="save">Save shift</button>
+        <button type="button" class="delete" id="deleteShift">Delete shift</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="timeDialog">
+    <form method="dialog" class="dialog-body" id="timeForm">
+      <h3 id="timeDialogTitle">Edit time</h3>
+      <p id="timeDialogNote">This time will be saved on the selected shift date.</p>
+      <div class="field"><label for="singleTimeInput">Time</label><input id="singleTimeInput" type="time"></div>
+      <div class="dialog-actions">
+        <button type="button" class="cancel" id="cancelTime">Cancel</button>
+        <button type="submit" class="save">Save time</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (() => {
+    const START_DATE = '2026-06-15';
+    const RATE_15 = 15;
+    const RATE_1271 = 12.71;
+    const STORE = 'my_work_shifts_v1';
+    const $ = id => document.getElementById(id);
+    const pad = n => String(n).padStart(2,'0');
+    const toDateKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const fromDateKey = key => {
+      const [y,m,d] = key.split('-').map(Number);
+      return new Date(y,m-1,d);
+    };
+    const displayDate = key => fromDateKey(key).toLocaleDateString(undefined, {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const displayShortDate = key => fromDateKey(key).toLocaleDateString(undefined, {day:'numeric',month:'short'});
+    const displayTime = iso => iso ? new Date(iso).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '—';
+    const timeFromIso = iso => iso ? `${pad(new Date(iso).getHours())}:${pad(new Date(iso).getMinutes())}` : '';
+    const isoForDateAndTime = (dateKey,time) => {
+      if (!time) return null;
+      const [y,m,d] = dateKey.split('-').map(Number);
+      const [hour,minute] = time.split(':').map(Number);
+      return new Date(y,m-1,d,hour,minute,0,0).toISOString();
+    };
+    const nowForDate = dateKey => {
+      const now = new Date();
+      return isoForDateAndTime(dateKey, `${pad(now.getHours())}:${pad(now.getMinutes())}`);
+    };
+    const currency = n => new Intl.NumberFormat(undefined,{style:'currency',currency:'GBP'}).format(n || 0);
+    const duration = minutes => {
+      minutes = Math.max(0,Math.round(minutes || 0));
+      return `${Math.floor(minutes/60)}h ${pad(minutes%60)}m`;
+    };
+    const minutesBetween = (a,b) => a && b ? Math.max(0,(new Date(b)-new Date(a))/60000) : 0;
+    const paidMinutes = s => {
+      if (!s?.clockIn || !s?.clockOut) return 0;
+      let total = minutesBetween(s.clockIn,s.clockOut);
+      if (s.breakStart && s.breakEnd) total -= minutesBetween(s.breakStart,s.breakEnd);
+      return Math.max(0,total);
+    };
+    const read = () => {
+      try { return JSON.parse(localStorage.getItem(STORE) || '[]'); }
+      catch { return []; }
+    };
+    const write = data => localStorage.setItem(STORE,JSON.stringify(data));
+    const shiftDateDefault = () => {
+      const today = toDateKey(new Date());
+      return today < START_DATE ? START_DATE : today;
+    };
+    const newId = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}_${Math.random()}`;
+
+    const state = {selectedDate:shiftDateDefault(), editId:null, singleField:null};
+    const selectedDate = $('selectedDate');
+    selectedDate.min = START_DATE;
+    selectedDate.value = state.selectedDate;
+
+    const allShifts = () => read();
+    const findShift = dateKey => allShifts().find(s => s.date === dateKey) || null;
+    const updateShift = shift => {
+      const all = allShifts();
+      const i = all.findIndex(s => s.id === shift.id);
+      if (i >= 0) all[i] = shift; else all.push(shift);
+      write(all);
+    };
+    const deleteShift = id => write(allShifts().filter(s => s.id !== id));
+    const ensureShift = () => {
+      let s = findShift(state.selectedDate);
+      if (!s) {
+        s = {id:newId(),date:state.selectedDate,clockIn:null,breakStart:null,breakEnd:null,clockOut:null,rate15:true};
+        updateShift(s);
+      }
+      return s;
+    };
+    const weekStart = dateKey => {
+      const d = fromDateKey(dateKey);
+      const offset = (d.getDay() + 6) % 7;
+      d.setDate(d.getDate() - offset);
+      return toDateKey(d);
+    };
+    const addDays = (dateKey,n) => {
+      const d = fromDateKey(dateKey);
+      d.setDate(d.getDate() + n);
+      return toDateKey(d);
+    };
+    const toast = message => {
+      const element = $('toast');
+      element.textContent = message;
+      element.classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => element.classList.remove('show'),2500);
+    };
+    const setDate = key => {
+      if (!key || key < START_DATE) {
+        key = START_DATE;
+        toast('Dates start from 15 June 2026.');
+      }
+      state.selectedDate = key;
+      selectedDate.value = key;
+      render();
+    };
+
+    function renderDateStrip() {
+      const root = $('dateStrip');
+      root.innerHTML = '';
+      const week = weekStart(state.selectedDate);
+      for (let i=0;i<7;i++) {
+        const key = addDays(week,i);
+        if (key < START_DATE) continue;
+        const d = fromDateKey(key);
+        const button = document.createElement('button');
+        button.className = `day-chip ${key===state.selectedDate ? 'active' : ''}`;
+        button.innerHTML = `<span>${d.toLocaleDateString(undefined,{weekday:'short'})}</span>${d.getDate()} ${d.toLocaleDateString(undefined,{month:'short'})}`;
+        button.addEventListener('click',() => setDate(key));
+        root.appendChild(button);
+      }
+    }
+
+    function renderCurrentShift() {
+      const s = findShift(state.selectedDate);
+      $('selectedDateText').textContent = displayDate(state.selectedDate);
+      $('inTime').textContent = displayTime(s?.clockIn);
+      $('breakStartTime').textContent = displayTime(s?.breakStart);
+      $('breakEndTime').textContent = displayTime(s?.breakEnd);
+      $('outTime').textContent = displayTime(s?.clockOut);
+      $('rateToggle').checked = s ? !!s.rate15 : true;
+
+      const inDone = !!s?.clockIn, breakStarted = !!s?.breakStart, breakEnded = !!s?.breakEnd, outDone = !!s?.clockOut;
+      $('clockInBtn').disabled = inDone;
+      $('startBreakBtn').disabled = !inDone || breakStarted || outDone;
+      $('endBreakBtn').disabled = !breakStarted || breakEnded || outDone;
+      $('clockOutBtn').disabled = !inDone || outDone || (breakStarted && !breakEnded);
+
+      let hint = 'Tap Clock In to start. Edit times with an iPhone time picker — no need to enter the date again.';
+      if (inDone && !breakStarted) hint = 'You are clocked in. Tap Start Break when your break begins.';
+      if (breakStarted && !breakEnded) hint = 'Your break is running. Tap End Break when you return.';
+      if (inDone && breakEnded && !outDone) hint = 'You are back at work. Tap Clock Out when you finish.';
+      if (outDone) hint = `Shift saved: ${duration(paidMinutes(s))} paid at ${s.rate15 ? '£15/hour' : '£12.71/hour'}.`;
+      $('shiftHint').textContent = hint;
+    }
+
+    function renderWeek() {
+      const start = weekStart(state.selectedDate), end = addDays(start,6);
+      const weekShifts = allShifts().filter(s => s.date >= start && s.date <= end);
+      let minutes=0, minutes15=0, minutes1271=0, pay=0;
+      weekShifts.forEach(s => {
+        const worked = paidMinutes(s);
+        minutes += worked;
+        if (s.rate15) { minutes15 += worked; pay += worked/60*RATE_15; }
+        else { minutes1271 += worked; pay += worked/60*RATE_1271; }
+      });
+      $('weekLabel').textContent = `Week of ${displayShortDate(start)}`;
+      $('weekRange').textContent = `${displayShortDate(start)}–${displayShortDate(end)}`;
+      $('weeklyHours').textContent = duration(minutes);
+      $('weeklyPay').textContent = currency(pay);
+      $('rate15Hours').textContent = duration(minutes15);
+      $('rate1271Hours').textContent = duration(minutes1271);
+    }
+
+    function renderShifts() {
+      const root = $('shiftsList');
+      const shifts = allShifts().sort((a,b) => b.date.localeCompare(a.date));
+      root.innerHTML = '';
+      if (!shifts.length) {
+        root.innerHTML = '<div class="empty">No shifts saved yet. Your first shift will appear here.</div>';
+        return;
+      }
+      shifts.slice(0,20).forEach(s => {
+        const minutes = paidMinutes(s);
+        const rate = s.rate15 ? RATE_15 : RATE_1271;
+        const item = document.createElement('div');
+        item.className = 'shift';
+        item.innerHTML = `<div><strong>${displayDate(s.date)}</strong><p>${displayTime(s.clockIn)} – ${displayTime(s.clockOut)} · ${duration(minutes)} · ${s.rate15 ? '£15.00' : '£12.71'}/hr · ${currency(minutes/60*rate)}</p></div><button class="edit">Edit</button>`;
+        item.querySelector('.edit').addEventListener('click',() => openEdit(s.id));
+        root.appendChild(item);
+      });
+    }
+
+    function render() {
+      renderDateStrip();
+      renderCurrentShift();
+      renderWeek();
+      renderShifts();
+    }
+
+    function record(field) {
+      const s = ensureShift();
+      s[field] = nowForDate(state.selectedDate);
+      updateShift(s);
+      render();
+      const labels = {clockIn:'Clocked in',breakStart:'Break started',breakEnd:'Break ended',clockOut:'Clocked out'};
+      toast(`${labels[field]} at ${displayTime(s[field])}`);
+    }
+
+    $('clockInBtn').addEventListener('click',() => record('clockIn'));
+    $('startBreakBtn').addEventListener('click',() => record('breakStart'));
+    $('endBreakBtn').addEventListener('click',() => record('breakEnd'));
+    $('clockOutBtn').addEventListener('click',() => record('clockOut'));
+    selectedDate.addEventListener('change',event => setDate(event.target.value));
+
+    $('rateToggle').addEventListener('change',event => {
+      const s = ensureShift();
+      s.rate15 = event.target.checked;
+      updateShift(s);
+      render();
+      toast(event.target.checked ? '£15/hour selected' : '£12.71/hour selected');
+    });
+
+    function openEdit(id) {
+      const s = allShifts().find(item => item.id === id);
+      if (!s) return;
+      state.editId = id;
+      $('editDate').min = START_DATE;
+      $('editDate').value = s.date;
+      $('editClockIn').value = timeFromIso(s.clockIn);
+      $('editBreakStart').value = timeFromIso(s.breakStart);
+      $('editBreakEnd').value = timeFromIso(s.breakEnd);
+      $('editClockOut').value = timeFromIso(s.clockOut);
+      $('editRateToggle').checked = !!s.rate15;
+      $('editDialog').showModal();
+    }
+
+    $('editShiftTop').addEventListener('click',() => {
+      let s = findShift(state.selectedDate);
+      if (!s) { s = ensureShift(); render(); }
+      openEdit(s.id);
+    });
+
+    document.querySelectorAll('.edit-small').forEach(button => {
+      button.addEventListener('click',() => {
+        const s = ensureShift();
+        state.singleField = button.dataset.timeField;
+        const label = button.closest('.time-box').querySelector('.label').textContent.toLowerCase();
+        $('timeDialogTitle').textContent = `Edit ${label}`;
+        $('timeDialogNote').textContent = `This time will be saved on ${displayDate(state.selectedDate)}. You do not need to choose the date again.`;
+        $('singleTimeInput').value = timeFromIso(s[state.singleField]) || timeFromIso(nowForDate(state.selectedDate));
+        $('timeDialog').showModal();
+      });
+    });
+
+    $('cancelEdit').addEventListener('click',() => $('editDialog').close());
+    $('cancelTime').addEventListener('click',() => $('timeDialog').close());
+
+    $('editForm').addEventListener('submit',event => {
+      event.preventDefault();
+      const all = allShifts();
+      const index = all.findIndex(s => s.id === state.editId);
+      if (index < 0) return;
+      const date = $('editDate').value;
+      if (!date || date < START_DATE) { toast('Choose a date from 15 June 2026 onwards.'); return; }
+      const old = all[index];
+      const updated = {
+        ...old,
+        date,
+        clockIn: isoForDateAndTime(date,$('editClockIn').value),
+        breakStart: isoForDateAndTime(date,$('editBreakStart').value),
+        breakEnd: isoForDateAndTime(date,$('editBreakEnd').value),
+        clockOut: isoForDateAndTime(date,$('editClockOut').value),
+        rate15: $('editRateToggle').checked
+      };
+      all[index] = updated;
+      write(all);
+      state.selectedDate = date;
+      selectedDate.value = date;
+      $('editDialog').close();
+      render();
+      toast('Shift updated');
+    });
+
+    $('timeForm').addEventListener('submit',event => {
+      event.preventDefault();
+      const value = $('singleTimeInput').value;
+      if (!value) { toast('Choose a time first.'); return; }
+      const s = ensureShift();
+      s[state.singleField] = isoForDateAndTime(state.selectedDate,value);
+      updateShift(s);
+      $('timeDialog').close();
+      render();
+      toast('Time updated');
+    });
+
+    $('deleteShift').addEventListener('click',() => {
+      if (!state.editId) return;
+      deleteShift(state.editId);
+      $('editDialog').close();
+      render();
+      toast('Shift deleted');
+    });
+
+    $('exportBtn').addEventListener('click',() => {
+      const rows = [['Date','Clock In','Break Start','Break End','Clock Out','Rate','Paid Hours','Estimated Pay']];
+      allShifts().sort((a,b) => a.date.localeCompare(b.date)).forEach(s => {
+        const minutes = paidMinutes(s);
+        const rate = s.rate15 ? RATE_15 : RATE_1271;
+        rows.push([s.date,displayTime(s.clockIn),displayTime(s.breakStart),displayTime(s.breakEnd),displayTime(s.clockOut),rate,(minutes/60).toFixed(2),(minutes/60*rate).toFixed(2)]);
+      });
+      const csv = rows.map(row => row.map(value => `"${String(value).replaceAll('"','""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'My_Work_Shifts.csv';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url),1000);
+      toast('Spreadsheet export created');
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>
